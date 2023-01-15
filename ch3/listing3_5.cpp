@@ -3,7 +3,7 @@
 struct College {
   // C-style string for pointer decay example
   // clang-tidy recommends std::array<>
-  char name[256];
+  char name[256]; // NOLINT
 };
 
 void PrintName(College *colleges, size_t n_colleges) {
@@ -13,7 +13,7 @@ void PrintName(College *colleges, size_t n_colleges) {
 }
 
 auto main() -> int {
-  College best_colleges[] = {"Magdalen", "Nuffield", "Kellogg"};
+  College best_colleges[] = {"Magdalen", "Nuffield", "Kellogg"}; // NOLINT
   // best_colleges array decays into a pointer of the first element
   PrintName(best_colleges, sizeof(best_colleges) / sizeof(College));
 }
