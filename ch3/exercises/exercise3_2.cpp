@@ -1,13 +1,13 @@
 #include <cstdio>
 
 void WriteTo(char *word, size_t n_letters, int index, char letter) {
-  if (index < n_letters - 1) {
+  if (index >= 0 && index < n_letters - 1) {
     word[index] = letter;
   }
 }
 
 auto ReadFrom(const char *word, size_t n_letters, int index) -> char {
-  if (index < n_letters - 1) {
+  if (index >= 0 && index < n_letters - 1) {
     return word[index];
   }
   return word[0];
