@@ -23,6 +23,8 @@ struct Contract {
 
 void FormCompany(Contract &contract) {
   // Use of auto inside a range loop.
+  // The use of auto here helps in refactoring. Should the type of dwarves
+  // change, then auto should deduce the correct type afterwards.
   for (const auto &dwarf : dwarves) {
     contract.Add(dwarf);
   }
