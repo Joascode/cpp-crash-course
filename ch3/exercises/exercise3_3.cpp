@@ -5,10 +5,6 @@ struct Element {
   Element *previous{};
 
   void InsertBefore(Element *new_element) {
-    // if (new_element->next != nullptr && new_element->next != this) {
-    //   next = new_element->next;
-    //   new_element->next = this;
-    // }
     if (new_element->next != nullptr) {
       new_element->next = this;
     }
@@ -16,10 +12,6 @@ struct Element {
     previous = new_element;
   }
   void InsertAfter(Element *new_element) {
-    // if (new_element->previous != nullptr && new_element->previous != this) {
-    //   previous = new_element->previous;
-    //   new_element->previous = this;
-    // }
     if (new_element->previous != nullptr) {
       new_element->previous = this;
     }
