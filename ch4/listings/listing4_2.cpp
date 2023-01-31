@@ -2,7 +2,11 @@
 
 // static storage duration variable
 // This global static variable is reachable within this translation unit.
-static int rat_things_power = 0;
+
+// Instead of static int rat_things_power = 0; we can also do:
+// By using extern, this variable is now available externally, with external
+// linking. Meaning it's reachable outside of it's own translation unit.
+extern int rat_things_power = 0; // NOLINT
 
 void PowerUpRatThing(int nuclear_isotopes) {
   rat_things_power += nuclear_isotopes;
