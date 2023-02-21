@@ -24,6 +24,12 @@ struct FileLogger : Logger {
   }
 };
 
+struct AccountDatabase {
+  virtual ~AccountDatabase() = default;
+  virtual auto RetrieveAmount(long accountId) -> double = 0;
+  virtual void SetAmount(long accountId) = 0;
+};
+
 struct Bank {
   explicit Bank(Logger &logger) : logger_{logger} {}
   void MakeTransfer(TransferDetails details) { logger_.LogTransfer(details); }
