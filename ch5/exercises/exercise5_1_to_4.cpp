@@ -1,3 +1,4 @@
+#include <array>
 #include <cstdio>
 struct TransferDetails {
   const long fromAccount;
@@ -24,10 +25,45 @@ struct FileLogger : Logger {
   }
 };
 
+struct Account {
+  long id;
+  double amount;
+};
+
 struct AccountDatabase {
   virtual ~AccountDatabase() = default;
   virtual auto RetrieveAmount(long accountId) -> double = 0;
-  virtual void SetAmount(long accountId) = 0;
+  virtual void SetAmount(long accountId, double amount) = 0;
+};
+
+struct InMemoryAccountDatabase : AccountDatabase {
+  InMemoryAccountDatabase(const Account account1, const Account account2) {
+    accounts_[0] = account1;
+    accounts_[1] = account2;
+  }
+
+  auto RetrieveAmount(const long accountId) -> double override {
+    double amount = 0.0;
+    std::for_each(accounts_.cbegin(), accounts_.cend(),
+                  [&accountId, &amount](Account account) {
+                    if (account.id == accountId) {
+                      amount = account.amount;
+                    }
+                  });
+    return amount;
+  }
+
+  void SetAmount(const long accountId, const double amount) override {
+    std::for_each(accounts_.cbegin(), accounts_.cend(),
+                  [&accountId, &amount](Account account) {
+                    if (account.id == accountId) {
+                      account.amount = amount;
+                    }
+                  });
+  }
+
+private:
+  std::array<Account, 2> accounts_;
 };
 
 struct Bank {
