@@ -3,6 +3,15 @@
 
 struct TimerClass {
   TimerClass() : timestamp{std::time(nullptr)} {}
+  TimerClass(const TimerClass &other) = default;
+
+  auto operator=(const TimerClass &other) -> TimerClass & {
+    if (this == &other) {
+      return *this;
+    }
+    timestamp = other.timestamp;
+    return *this;
+  }
 
   ~TimerClass() {
     const std::time_t age = std::time(nullptr) - timestamp;
