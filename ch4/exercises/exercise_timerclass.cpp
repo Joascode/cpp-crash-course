@@ -6,19 +6,28 @@
 struct TimerClass {
   explicit TimerClass(const char *name)
       : timestamp{std::time(nullptr)}, name{name} {}
-  TimerClass(const TimerClass &other) = default;
-  TimerClass(TimerClass &&other) noexcept : timestamp{other.timestamp} {
+
+  TimerClass(const TimerClass &other)
+      : timestamp{other.timestamp}, name{other.name} {
+    printf("Copy constructor\n");
+  }
+
+  TimerClass(TimerClass &&other) noexcept
+      : timestamp{other.timestamp}, name{other.name} {
     printf("Move constructor\n");
     other.timestamp = 0;
+    other.name = nullptr;
   }
 
   auto operator=(const TimerClass &other) -> TimerClass & {
+    printf("Copy assignment\n");
     if (this == &other) {
       return *this;
     }
     timestamp = other.timestamp;
     return *this;
   }
+
   auto operator=(TimerClass &&other) noexcept -> TimerClass & {
     printf("Move assignment\n");
     if (this == &other) {
@@ -48,5 +57,7 @@ struct TimerClass {
 auto main() -> int {
   TimerClass timer{"first timer"};
   TimerClass timer2{"second timer"};
+  const TimerClass timer3{timer};
   timer2 = std::move(timer);
+  printf("Name of timer3: %s\n", timer3.name);
 }
