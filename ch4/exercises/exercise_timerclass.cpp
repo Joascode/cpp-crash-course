@@ -10,6 +10,8 @@ struct TimerClass {
   TimerClass(const TimerClass &other)
       : m_timestamp{other.m_timestamp}, m_name{other.m_name} {
     printf("Copy constructor\n");
+    printf("variable m_name is at address: %p\n", m_name);
+    printf("variable other.m_name is at address: %p\n", other.m_name);
   }
 
   TimerClass(TimerClass &&other) noexcept
@@ -25,7 +27,16 @@ struct TimerClass {
       return *this;
     }
     m_timestamp = other.m_timestamp;
+    // There's a lot of test prints in this exercise to determine what happens.
+    // I was contemplating whether this would violate the copy rules or not.
+    // Since it points to the same location in memory.
+    // But since it's a const *char, the location is only readable and not
+    // assignable.
+    // Should other.m_name change value, it points to a new block of memory.
+    // m_name in this instance remains unchanged.
     m_name = other.m_name;
+    printf("variable m_name is at address: %p\n", m_name);
+    printf("variable other.m_name is at address: %p\n", other.m_name);
     return *this;
   }
 
@@ -59,6 +70,13 @@ auto main() -> int {
   TimerClass timer{"first timer"};
   TimerClass timer2{"second timer"};
   const TimerClass timer3{timer};
+  // This apparently does work
+  timer.m_name = "test name";
+  printf("variable timer.m_name is at address: %p\n", timer.m_name);
   timer2 = std::move(timer);
+  // A simple long for-loop to get a timestamp difference between creation and
+  // deletion. Fortunately, the compiler didn't compile this away in my case :)
+  for (auto i = 0L; i < 100000000; i++) {
+  }
   printf("Name of timer3: %s\n", timer3.m_name);
 }
