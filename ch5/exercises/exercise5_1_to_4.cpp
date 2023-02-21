@@ -12,10 +12,14 @@ struct Logger {
 };
 
 struct ConsoleLogger : Logger {
+  explicit ConsoleLogger(const char *name) : m_name_{name} {}
   void LogTransfer(TransferDetails details) override {
-    printf("[cons] %ld -> %ld: %f\n", details.fromAccount, details.toAccount,
-           details.amount);
+    printf("[%s] %ld -> %ld: %f\n", m_name_, details.fromAccount,
+           details.toAccount, details.amount);
   }
+
+private:
+  const char *m_name_;
 };
 
 struct FileLogger : Logger {
@@ -114,7 +118,7 @@ private:
 // };
 
 auto main() -> int {
-  ConsoleLogger logger;
+  ConsoleLogger logger{"console"};
   InMemoryAccountDatabase account_db{Account{1000, 50.00},
                                      Account{2000, 50.00}};
   Bank bank{logger, account_db};
