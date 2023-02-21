@@ -32,9 +32,29 @@ private:
   Logger &logger_;
 };
 
+/**
+ * @brief Commented out Bank struct is useful for dynamically changing the
+ * internally used logger instance from Console to File for example. Since
+ * references can't be reseated.
+ *
+ */
+// struct Bank {
+//   explicit Bank(Logger *logger) : logger_{logger} {}
+//   void MakeTransfer(TransferDetails details) {
+//     if (logger_ != nullptr) {
+//       logger_->LogTransfer(details);
+//     }
+//   }
+//   void SetLogger(Logger *logger) { logger_ = logger; }
+
+// private:
+//   Logger *logger_;
+// };
+
 auto main() -> int {
   ConsoleLogger logger;
   Bank bank{logger};
+  // Bank bank{&logger};
   bank.MakeTransfer({1000, 2000, 49.95});
   bank.MakeTransfer({2000, 4000, 20.00});
 }
