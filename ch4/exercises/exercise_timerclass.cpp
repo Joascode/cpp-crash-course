@@ -5,18 +5,18 @@
 
 struct TimerClass {
   explicit TimerClass(const char *name)
-      : timestamp{std::time(nullptr)}, name{name} {}
+      : m_timestamp{std::time(nullptr)}, m_name{name} {}
 
   TimerClass(const TimerClass &other)
-      : timestamp{other.timestamp}, name{other.name} {
+      : m_timestamp{other.m_timestamp}, m_name{other.m_name} {
     printf("Copy constructor\n");
   }
 
   TimerClass(TimerClass &&other) noexcept
-      : timestamp{other.timestamp}, name{other.name} {
+      : m_timestamp{other.m_timestamp}, m_name{other.m_name} {
     printf("Move constructor\n");
-    other.timestamp = 0;
-    other.name = nullptr;
+    other.m_timestamp = 0;
+    other.m_name = nullptr;
   }
 
   auto operator=(const TimerClass &other) -> TimerClass & {
@@ -24,7 +24,8 @@ struct TimerClass {
     if (this == &other) {
       return *this;
     }
-    timestamp = other.timestamp;
+    m_timestamp = other.m_timestamp;
+    m_name = other.m_name;
     return *this;
   }
 
@@ -33,25 +34,25 @@ struct TimerClass {
     if (this == &other) {
       return *this;
     }
-    timestamp = other.timestamp;
-    name = other.name;
-    other.name = nullptr;
-    other.timestamp = 0;
+    m_timestamp = other.m_timestamp;
+    m_name = other.m_name;
+    other.m_name = nullptr;
+    other.m_timestamp = 0;
     return *this;
   }
 
   ~TimerClass() {
-    printf("Timestamp: %ld\n", timestamp);
-    if (timestamp != 0) {
-      const std::time_t age = std::time(nullptr) - timestamp;
-      printf("Age of %s: %ld\n", name, age);
+    printf("Timestamp: %ld\n", m_timestamp);
+    if (m_timestamp != 0) {
+      const std::time_t age = std::time(nullptr) - m_timestamp;
+      printf("Age of %s: %ld\n", m_name, age);
     } else {
-      printf("%s is moved.\n", name);
+      printf("%s is moved.\n", m_name);
     }
   }
 
-  std::time_t timestamp;
-  const char *name;
+  std::time_t m_timestamp;
+  const char *m_name;
 };
 
 auto main() -> int {
@@ -59,5 +60,5 @@ auto main() -> int {
   TimerClass timer2{"second timer"};
   const TimerClass timer3{timer};
   timer2 = std::move(timer);
-  printf("Name of timer3: %s\n", timer3.name);
+  printf("Name of timer3: %s\n", timer3.m_name);
 }
